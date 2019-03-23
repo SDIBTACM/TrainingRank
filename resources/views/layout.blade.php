@@ -96,7 +96,7 @@
             </main>
 
             <footer id="footer">
-                <p>© 2018 - SDIBT Training Rank - <a href="https://github.com/sdibtacm/steptraining" target="_blank"> Github </a></p>
+                <p>© 2019 - SDIBT Training Rank - <a href="https://github.com/sdibtacm/TrainingRank" target="_blank"> Github </a></p>
                 <p>run in {{ printf("%.5f", microtime(true) - LARAVEL_START) }} in seconds.</p>
                 <p>Powered by <a target="_blank" href="https://boxjan.com"> Boxjan </a> &amp; <a href="https://github.com/sdibtacm"> SDIBT ACM Team </a><br></p>
             </footer>
