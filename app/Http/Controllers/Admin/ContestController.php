@@ -125,7 +125,6 @@ class ContestController extends Controller
         $oldContest = Contest::findOrFail($id);
 
         ContestResult::where('contest_id', $id)->delete();
-        StudentRating::where('contest_id', $id)->delete();
 
         Contest::destroy($id);
         Log::info('User: {} delete contest: {}', Auth::user()->username, $oldContest);
