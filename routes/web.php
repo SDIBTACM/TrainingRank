@@ -11,6 +11,10 @@
 |
 */
 
+// Load Url rewrite
+if (env('PROXY_PASS_URL', null) != null && Request::isFromTrustedProxy() )
+    URL::forceRootUrl(env('PROXY_PASS_URL'));
+
 // Authentication Routes...
 Route::get('/login', 'Auth\LoginController@showLoginFrom')->name('login_page');
 Route::post('/login', 'Auth\LoginController@login') ->name('login');
