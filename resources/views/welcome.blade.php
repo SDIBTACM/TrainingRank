@@ -10,7 +10,7 @@
             </div>
 
             <div class="card-body form-inline">
-                <div id="studentRatingRankTable" class="col-md-6">
+                <div id="studentRatingRankTable" class="col-lg-6">
                     <h3 class="h3"> Latest Rating (Random </h3>
                     <table class="table">
                         <thead>
@@ -40,7 +40,7 @@
 
                 </div>
 
-                <div id="ContestTable" class="col-md-6">
+                <div id="ContestTable" class="col-lg-6">
                     <h3 class="h3"> Recently Contest </h3>
                     <table class="table">
                         <thead>
