@@ -12,7 +12,7 @@
 */
 
 // Load Url rewrite
-if (env('PROXY_PASS_URL', null) != null && Request::isFromTrustedProxy() )
+if ( env('PROXY_PASS') != true )
     URL::forceRootUrl(env('PROXY_PASS_URL'));
 
 // Authentication Routes...
