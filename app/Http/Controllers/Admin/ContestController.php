@@ -102,9 +102,9 @@ class ContestController extends Controller
 
         foreach ($contestResults as $result) {
             array_push($rank, array(
-                'student_name' => $students[$result->student_id]['name'],
-                'student_account' => $students[$result->student_id]['account'],
-                'student_rank' => $result['rank'],
+                'name' => $students[$result->student_id]['name'],
+                'account' => $students[$result->student_id]['account'],
+                'rank' => $result['rank'],
             ) );
         }
 

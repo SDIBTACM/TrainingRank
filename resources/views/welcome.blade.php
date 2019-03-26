@@ -11,7 +11,24 @@
 
             <div class="card-body form-inline">
                 <div id="studentRatingRankTable" class="col-lg-6">
-                    <h3 class="h3"> Latest Rating (Random </h3>
+                    <div class="row">
+                        <h3 class="h3 mx-sm-3"> Latest Rating </h3>
+                        <form class="row  mx-sm-3">
+                            <div class="form-group mb-2">
+                                <label for="groupSelect" class="sr-only">oj</label>
+                                <select id="groupSelect" class="form-control" name="group">
+                                    <option value="" {{ Request::get('group', null) == null ? 'selected': '' }}> Origin Group... </option>
+                                    @foreach($groups as $group)
+                                        <option value="{{ $group->id }}" {{ Request::get('group', null) == $group->id ? 'selected': '' }}> {{ $group->name }} </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mb-2 mx-sm-3">
+                                <input type="submit"class="form-control btn btn-primary" id="SubmitButton" value="Search">
+                            </div>
+                        </form>
+                    </div>
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -28,11 +45,13 @@
                         @foreach($students as $student)
                             <tr>
                                 <th scope="row">{{ $i++ }}</th>
-                                <td>{{ $student->name }}</td>
-                                <td>{{ $student->student_id }}</td>
-                                <td>{{ $student->rating }}</td>
-                                <td><a href="{{ route('student.show', ['student_id' => $student->id]) }}">Detail</a></td>
+                                <td>{{ $student['name'] }}</td>
+                                <td>{{ $student['student_id'] }}</td>
+                                <td>{{ $student['rating'] }}</td>
+                                <td><a href="{{ route('student.show', ['student_id' => $student['id']]) }}">Detail</a></td>
                             </tr>
+                            @if ($i > 20)
+                                @break
                         @endforeach
 
                         </tbody>
