@@ -50,8 +50,10 @@
                                 <td>{{ $student['rating'] }}</td>
                                 <td><a href="{{ route('student.show', ['student_id' => $student['id']]) }}">Detail</a></td>
                             </tr>
-                            @if ($i > 20)
-                                @break
+                            @php
+                                if($i > 20)
+                                    break;
+                            @endphp
                         @endforeach
 
                         </tbody>
