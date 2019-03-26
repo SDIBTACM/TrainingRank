@@ -12,14 +12,14 @@ class HomeController extends Controller
 
     public function index() {
 
-        $students = Student::where('is_show', 0)->inRandomOrder()->select(['id','name', 'student_id'])->limit(10)->get();
+        $students = Student::where('is_show', 0)->inRandomOrder()->select(['id','name', 'student_id'])->limit(20)->get();
 
         foreach ($students as $student) {
             $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
         }
 
         return view('welcome', [
-            'contests' => Contest::limit(10)->get(),
+            'contests' => Contest::limit(20)->get(),
             'students' => $students
            ]);
     }
