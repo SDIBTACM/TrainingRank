@@ -41,7 +41,7 @@ Route::prefix('/admin/')->namespace('Admin')->middleware(['auth'])->name('admin.
         return redirect()->route('admin.contest.create');
     })->name('index');
 
-    Route::resource('contest', "ContestController")->except(['update', 'edit']);
+    Route::resource('contest', "ContestController")->except(['edit']);
     Route::resource('student', "StudentController")->except(['create', 'edit', 'show']);
     Route::resource('user', "UserController")->except(['create', 'edit', 'show']);
     Route::resource('group', "GroupController")->except(['create', 'edit', 'show', 'update']);

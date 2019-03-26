@@ -30,6 +30,20 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="contest-url" class="col-sm-3 col-form-label"> {{__("Contest Url")}} </label>
+                                <div class="col-md-6">
+                                    <input type="text" class="form-control form-control{{ $errors->has('url') ? ' is-invalid' : '' }}"
+                                           id="contest-url" placeholder="{{__("Contest Url")}}" name="url" maxlength="200"
+                                           value="{{ old('url') }}">
+                                    @if ($errors->has('url'))
+                                        <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $errors->first('url') }}</strong>
+                                    </span>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="contest-time" class="col-sm-3 col-form-label"> {{__("Contest Time")}} </label>
                                 <div class="col-md-6">
                                     <input type="hidden" class="form-control" id="contest-time" name="contest-time" v-model="contestTime">

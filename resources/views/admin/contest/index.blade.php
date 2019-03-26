@@ -53,10 +53,7 @@
 
             methods: {
                 handleDetail(id) {
-                    window.open('{{ route('admin.contest.index') }}' + '/' + id, '', {
-                        menubar: 0,
-                        toolbar: 0,
-                    });
+                    window.open('{{ route('admin.contest.index') }}' + '/' + id, '');
                 },
 
                 handleDelete(index, id) {

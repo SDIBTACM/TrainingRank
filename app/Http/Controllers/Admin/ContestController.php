@@ -18,6 +18,7 @@ use App\Model\Student;
 use App\Services\RankingCalculator\RankCalculator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 
 class ContestController extends Controller
@@ -38,12 +39,14 @@ class ContestController extends Controller
 
         $validatedData = $request->validate([
             'contest-time' => 'required|date',
-            'contest-name' => 'required|unique:contests,name|max:42'
+            'contest-name' => 'required|unique:contests,name|max:42',
+            'url' => 'required|max:200'
         ]);
 
         $students = [ ];
 
         $contest = new Contest;
+        $contest->url = $validatedData['url'];
         $contest->name = $validatedData['contest-name'];
         $contest->start_time = $validatedData['contest-time'];
         $contest->save();
@@ -52,25 +55,27 @@ class ContestController extends Controller
 
         $rank_i = 1;
         foreach ($studentsRankRow as $studentRow) {
-            $rank_i ++;
+            if ( ! isset( $studentRow['name'] ) || $studentRow['name'] == null) continue;
 
-            if ($studentRow['name'] == null && $studentRow['id'] == null) continue;
+            $rank_i ++;
 
             $studentId = $studentRow['id'];
             if ($studentId == null) {
                 $studentId = Student::newStudent($studentRow['name'])->id;
             }
 
-            array_push($students, new \App\Services\RankingCalculator\Student($studentId,
-                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i,
-                ContestResult::getLatestRatingByStudentId($studentId)));
+            ContestResult::newResult($studentId, $contestId,
+                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0);
+
         }
 
-        RankCalculator::getCodeforeceRating($students);
+        $studentRanks = RankCalculator::getCodeforeceRatingByContestId($contestId);
 
-        foreach ($students as $student) {
-            ContestResult::newResult($student->id, $contestId, $student->position, $student->newRating);
+        foreach ($studentRanks as $studentsRank) {
+            ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank->id)
+                ->update(['rating' => $studentsRank->newRating]);
         }
+
 
         return redirect()->route('admin.contest.index');
 
@@ -95,6 +100,7 @@ class ContestController extends Controller
         $students = [];
         foreach ($studentsRow as $row) {
             $students[$row->id] = [
+                "id" => $row->id,
                 'name' => $row->name,
                 'student_id' => $row->student_id,
             ];
@@ -102,6 +108,7 @@ class ContestController extends Controller
 
         foreach ($contestResults as $result) {
             array_push($rank, array(
+                'id' => $students[$result->student_id]['id'],
                 'name' => $students[$result->student_id]['name'],
                 'student_id' => $students[$result->student_id]['student_id'],
                 'rank' => $result['rank'],
@@ -113,6 +120,7 @@ class ContestController extends Controller
 
         return view('admin.contest.detail', [
             'contest' => $contest,
+            'groups' => Group::select(['id', 'name'])->get(),
         ]);
     }
 
@@ -128,5 +136,61 @@ class ContestController extends Controller
 
         Contest::destroy($id);
         Log::info('User: {} delete contest: {}', Auth::user()->username, $oldContest);
+    }
+
+
+    public function update(Request $request, $id) {
+
+        $contest = Contest::find($id);
+
+        $validatedData = $request->validate([
+            'contest-time' => 'required|date',
+            'contest-name' => [
+                'required',
+                Rule::unique('contests','name')->ignore($contest->id),
+                'max:42'
+            ],
+            'url' => 'required|max:200'
+        ]);
+
+        $contest->url = $validatedData['url'];
+        $contest->name = $validatedData['contest-name'];
+        $contest->start_time = $validatedData['contest-time'];
+        $contest->save();
+
+        ContestResult::where('contest_id', $id)->delete();
+
+        $studentsRankRow = json_decode($request->post('contest-rank', ''), true);
+        $rank_i = 1;
+        foreach ($studentsRankRow as $studentRow) {
+            if ( ! isset( $studentRow['name'] ) || $studentRow['name'] == null) continue;
+
+            $rank_i ++;
+
+            $studentId = $studentRow['id'];
+            if ($studentId == null) {
+                $studentId = Student::newStudent($studentRow['name'])->id;
+            }
+
+            ContestResult::newResult($studentId, $contest->id,
+                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0);
+
+        }
+
+        $contestMaxId = Contest::orderBy('id', 'desc')->value('id');
+
+        for ($contestId = $contest->id; $contestId <= $contestMaxId; $contestId++) {
+            if (Contest::where('id', $contestId)->count() == 0) continue;
+
+            $studentRanks = RankCalculator::getCodeforeceRatingByContestId($contestId);
+
+            foreach ($studentRanks as $studentsRank) {
+                ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank->id)
+                    ->update(['rating' => $studentsRank->newRating]);
+            }
+        }
+
+
+        return redirect()->route('admin.contest.index');
     }
 }

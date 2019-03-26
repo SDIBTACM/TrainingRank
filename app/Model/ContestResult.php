@@ -39,6 +39,14 @@ class ContestResult extends Model
         return self::where('student_id', $studentId)->orderBy('contest_id', 'desc')->value('rating');
     }
 
+    static public function getRatingByStudentIdAndContestId($studentId, $contest_id) {
+        return self::where('student_id', $studentId)->where('contest_id', $contest_id)->value('rating');
+    }
+
+    static public function getRankByStudentIdAndContestId($studentId, $contest_id) {
+        return self::where('student_id', $studentId)->where('contest_id', $contest_id)->value('rank');
+    }
+
     public function student() {
         return $this->belongsTo('App\Model\Student');
     }

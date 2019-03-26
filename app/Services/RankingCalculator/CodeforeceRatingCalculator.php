@@ -88,7 +88,7 @@ class CodeforeceRatingCalculator
         try {
             $this->validateDeltas($contestants);
         } catch (\Exception $e) {
-            Log::error("", $e);
+            Log::error("", $e->getMessage());
             return false;
         }
 
@@ -171,9 +171,9 @@ class CodeforeceRatingCalculator
                     // If a contestant a also has higher rating than j
                     // So, a's rating should stay higher than j's.
                     if ($contestants[$i]->rating + $contestants[$i]->delta < $contestants[$j]->rating + $contestants[$j]->delta) {
-                        throw new \Exception('First rating invariant failed' .
-                            $contestants[$i]->party . ' vs. ' .
-                            $contestants[$j]->party . '.');
+                        throw new \Exception('First rating invariant failed ' .
+                            $contestants[$i]->party . ': {'. ($contestants[$i]->rating + $contestants[$i]->delta) .' }' . ' vs. ' .
+                            $contestants[$j]->party . ': {'. ($contestants[$j]->rating + $contestants[$j]->delta) .' }' . '.');
                     }
                 }
 
@@ -182,9 +182,9 @@ class CodeforeceRatingCalculator
                     // If a contestant a also has higher rating than j
                     // So, a's rating should stay higher than j's.
                     if ($contestants[$i]->delta < $contestants[$j]->delta) {
-                        throw new \Exception('Second rating invariant failed' .
-                            $contestants[$i]->party . ' vs. ' .
-                        $contestants[$j]->party . '.');
+                        throw new \Exception('Second rating invariant failed ' .
+                            $contestants[$i]->party . ": {$contestants[$i]->delta}". ' vs. ' .
+                        $contestants[$j]->party . ": {$contestants[$j]->delta}" . '.');
 			        }
                 }
 
