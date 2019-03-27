@@ -19,6 +19,8 @@
             <div class="card-header">
                 <h4 class="card-subtitle"> {{ __('Contest Name') }}: {{ $contest->name }}</h4>
                 <p class="card-subtitle"> {{ __('Competing time') }}: {{ $contest->start_time }} </p>
+                <p class="card-subtitle"> {{ __('Competing Url') }}:
+                    <a href="{{ $contest->url }}">{{ $contest->url }}</a> </p>
             </div>
 
             <div class="card-body">

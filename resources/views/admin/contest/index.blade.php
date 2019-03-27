@@ -12,15 +12,24 @@
 
                 <el-table :data="contests" style="width: 100%" stripe>
                     <el-table-column type="index" width="90"></el-table-column>
-                    <el-table-column prop="name" label="{{ __('Contest Name') }}" width="180"> </el-table-column>
+                    <el-table-column prop="name" label="{{ __('Contest Name') }}" width="180">
+                        <template slot-scope="scope">
+                            <a :href="'{{ route('admin.contest.index') }}' + '/' + scope.row.id">
+                                <p >@{{ scope.row.name }}</p>
+                            </a>
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="start_time" label="{{ __('Contest start time') }}" width="150"> </el-table-column>
                     <el-table-column prop="created_at" label="create time" width="150"> </el-table-column>
 
                     <el-table-column label="options" width="180">
                         <template slot-scope="scope">
-                            <el-button size="mini" type="info" @click="handleDetail(scope.row.id)">
-                                {{ __( 'Detail' ) }}
-                            </el-button>
+                            <a :href="'{{ route('admin.contest.index') }}' + '/' + scope.row.id">
+                                <el-button size="mini" type="info">
+                                    {{ __( 'Detail' ) }}
+                                </el-button>
+                            </a>
+
                             <el-button size="mini" type="danger" @click="handleDelete(scope.$index, scope.row.id)">
                                 {{ __('Delete') }}
                             </el-button>
