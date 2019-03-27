@@ -56,7 +56,7 @@ class StudentController extends Controller
 
         $ratingsRows = ContestResult::with(['contest' => function($query) {
             $query->select('id', 'name', 'start_time');
-        }])->where('student_id', $id)->select(['contest_id', 'rank', 'rating'])->get();
+        }])->where('student_id', $id)->orderBy('contest_id', 'asc')->select(['contest_id', 'rank', 'rating'])->get();
 
         $ratings = [
             'labels' => [],
