@@ -14,7 +14,7 @@
                     <el-table-column type="index" width="90"></el-table-column>
                     <el-table-column prop="name" label="{{ __('Contest Name') }}" width="180">
                         <template slot-scope="scope">
-                            <a :href="'{{ route('admin.contest.index') }}' + '/' + scope.row.id">
+                            <a :href="scope.row.url">
                                 <p >@{{ scope.row.name }}</p>
                             </a>
                         </template>
