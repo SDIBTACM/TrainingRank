@@ -76,6 +76,12 @@ class ContestController extends Controller
                 ->update(['rating' => $studentsRank->newRating]);
         }
 
+        Student::chunk(100, function ($students) {
+            foreach ($students as $student) {
+                $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->save();
+            }
+        });
 
         return redirect()->route('admin.contest.index');
 
@@ -136,6 +142,13 @@ class ContestController extends Controller
 
         Contest::destroy($id);
         Log::info('User: {} delete contest: {}', Auth::user()->username, $oldContest);
+
+        Student::chunk(100, function ($students) {
+            foreach ($students as $student) {
+                $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->save();
+            }
+        });
     }
 
 
@@ -189,6 +202,13 @@ class ContestController extends Controller
                     ->update(['rating' => $studentsRank->newRating]);
             }
         }
+
+        Student::chunk(100, function ($students) {
+            foreach ($students as $student) {
+                $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->save();
+            }
+        });
 
 
         return redirect()->route('admin.contest.index');

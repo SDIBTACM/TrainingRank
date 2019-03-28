@@ -13,15 +13,17 @@ use App\Log;
 use App\Model\ContestResult;
 use App\Model\Group;
 use App\Model\Student;
-use App\Model\StudentRating;
-use Illuminate\Http\Request;
+use DB;
+use Illuminate\Support\Facades\Request;
 
 
 class StudentController extends Controller
 {
-    public function index(Request $request) {
+    public function index(\Illuminate\Http\Request $request) {
 
-        $students = null;
+        $students = Student::with(['contestResult' => function($query) {
+            $query->orderBy('contest_id', 'desc')->orderBy('rating', 'desc')->value('rating');
+        }]);
 
         if ($request->get('name', null) != null) {
             $students === null ?
@@ -31,17 +33,15 @@ class StudentController extends Controller
 
         if ($request->get('group', null) != null) {
             $students === null ?
-                $students = Student::where('group', 'like', '%' . $request->get('group') . '%') :
-                $students = $students->where('group', 'like', '%' . $request->get('group') . '%');
+                $students = Student::where('group', $request->get('group')) :
+                $students = $students->where('group', $request->get('group'));
         }
 
         $students === null ?
             $students = Student::where('is_show', 0)->select(['student_id', 'name', 'id'])->paginate(20) :
-            $students = $students->where('is_show', 0)->select(['student_id', 'name', 'id'])->paginate(20);
+            $students = $students->where('is_show', 0)->orderBy('rating', 'desc')
+                ->select(['student_id', 'name', 'id', 'rating'])->paginate(20);
 
-        foreach ($students as $student) {
-            $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
-        }
 
         return view('home.student.index', [
             'title' => 'Student List',

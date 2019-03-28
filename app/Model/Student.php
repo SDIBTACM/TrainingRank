@@ -22,6 +22,7 @@ class Student extends Model
         $student->group = $group;
         $student->is_show = $isShow;
         $student->student_id = $student_id;
+        $student->rating = 1500;
 
         $student->save();
 
@@ -30,6 +31,10 @@ class Student extends Model
         Log::info('User: {}, add new student: {}', Auth::user()->username, $student);
 
         return $student;
+    }
+
+    public function contestResult() {
+        return $this->hasMany('App\Model\ContestResult');
     }
 
 }
