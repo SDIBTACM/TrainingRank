@@ -13,8 +13,6 @@ use App\Log;
 use App\Model\ContestResult;
 use App\Model\Group;
 use App\Model\Student;
-use DB;
-use Illuminate\Support\Facades\Request;
 
 
 class StudentController extends Controller
@@ -56,18 +54,31 @@ class StudentController extends Controller
 
         $ratingsRows = ContestResult::with(['contest' => function($query) {
             $query->select('id', 'name', 'start_time');
-        }])->where('student_id', $id)->orderBy('contest_id', 'asc')->select(['contest_id', 'rank', 'rating'])->get();
+        }])->where('student_id', $id)->orderBy('contest_id', 'asc')
+            ->select(['contest_id', 'rank', 'rating', 'solved_rating'])->get();
 
         $ratings = [
             'labels' => [],
             'data' => [],
         ];
 
-        foreach ($ratingsRows as $row) {
-            array_push($ratings['labels'], $row['contest'] === null ? 'null' :
-                [$row['contest']->name , $row['contest']->start_time]);
-            array_push($ratings['data'], $row['rating']);
+        if (\Request::get('type', 'cf_rating') == 'solved') {
+
+            foreach ($ratingsRows as $row) {
+                array_push($ratings['labels'], $row['contest'] === null ? 'null' :
+                    [$row['contest']->name , $row['contest']->start_time]);
+                array_push($ratings['data'], $row['solved_rating']);
+            }
+
+        } else {
+            foreach ($ratingsRows as $row) {
+                array_push($ratings['labels'], $row['contest'] === null ? 'null' :
+                    [$row['contest']->name , $row['contest']->start_time]);
+                array_push($ratings['data'], $row['rating']);
+            }
         }
+
+
 
         Log::debug('', $ratings);
 

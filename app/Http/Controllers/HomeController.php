@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 
 use App\Model\Contest;
-use App\Model\ContestResult;
 use App\Model\Group;
 use App\Model\Student;
 

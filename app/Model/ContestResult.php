@@ -21,16 +21,18 @@ class ContestResult extends Model
         $row->student_id = $student_id;
         $row->rank = 1;
         $row->rating = 1500;
+        $row->solved = 0;
 
         $row->save();
     }
 
-    static public function newResult($student_id, $contest_id, $rank, $rating) {
+    static public function newResult($student_id, $contest_id, $rank, $rating, $solved) {
         $row = new self;
         $row->contest_id = $contest_id;
         $row->student_id = $student_id;
         $row->rank = $rank;
         $row->rating = $rating;
+        $row->solved = $solved;
 
         $row->save();
     }

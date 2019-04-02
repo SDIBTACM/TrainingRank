@@ -57,4 +57,30 @@ class RankCalculator
             $row->newRating = $row->previousRating + $row->delta;
         }
     }
+
+    static public function getSolvedRatingByContestId($contest_id) {
+        $students = [];
+        $studentRows = ContestResult::where('contest_id', $contest_id)->get();
+
+        Log::info('start calc contest:', $contest_id);
+
+        foreach ($studentRows as $studentRow) {
+            array_push($students, [
+
+                'id' => $studentRow['student_id'],
+                'solved' => $studentRow['solved'],
+                'rank' => $studentRow['rank']
+
+            ]);
+        }
+        self::getSolvedRating($students);
+        return $students;
+    }
+
+    static public function getSolvedRating(Array &$rows) {
+        $calc = new SolvedRatingCalculate();
+        $calc->calculateRating($rows);
+
+    }
+
 }

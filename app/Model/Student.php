@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Auth;
 class Student extends Model
 {
 
-    static public function newStudent($name, $student_id, $isShow = 0, $group = 1) {
+    static public function newStudent($name, $student_id = 0, $isShow = 0, $group = 1) {
         $student = new self;
         $student->name = $name;
         $student->group = $group;

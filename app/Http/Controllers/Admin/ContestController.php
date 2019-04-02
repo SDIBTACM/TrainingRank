@@ -64,8 +64,9 @@ class ContestController extends Controller
                 $studentId = Student::newStudent($studentRow['name'])->id;
             }
 
-            ContestResult::newResult($studentId, $contestId,
-                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0);
+            ContestResult::newResult($studentId, $contest->id,
+                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0,
+                $studentRow['solved'] != null ? $studentRow['solved'] : 0);
 
         }
 
@@ -74,6 +75,13 @@ class ContestController extends Controller
         foreach ($studentRanks as $studentsRank) {
             ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank->id)
                 ->update(['rating' => $studentsRank->newRating]);
+        }
+
+        $studentsRanks2 = RankCalculator::getSolvedRatingByContestId($contestId);
+
+        foreach ($studentsRanks2 as $studentsRank) {
+            ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank['id'])
+                ->update(['solved_rating' => $studentsRank['rating']]);
         }
 
         Student::chunk(100, function ($students) {
@@ -118,6 +126,7 @@ class ContestController extends Controller
                 'name' => $students[$result->student_id]['name'],
                 'student_id' => $students[$result->student_id]['student_id'],
                 'rank' => $result['rank'],
+                'solved' => $result['solved'],
             ) );
         }
 
@@ -186,7 +195,8 @@ class ContestController extends Controller
             }
 
             ContestResult::newResult($studentId, $contest->id,
-                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0);
+                $studentRow['rank'] != null ? $studentRow['rank'] : $rank_i, 0,
+                $studentRow['solved'] != null ? $studentRow['solved'] : 0);
 
         }
 
@@ -201,6 +211,14 @@ class ContestController extends Controller
                 ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank->id)
                     ->update(['rating' => $studentsRank->newRating]);
             }
+
+            $studentsRanks2 = RankCalculator::getSolvedRatingByContestId($contestId);
+
+            foreach ($studentsRanks2 as $studentsRank) {
+                ContestResult::where('contest_id', $contestId)->where('student_id', $studentsRank['id'])
+                    ->update(['solved_rating' => $studentsRank['rating']]);
+            }
+
         }
 
         Student::chunk(100, function ($students) {

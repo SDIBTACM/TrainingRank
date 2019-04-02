@@ -19,7 +19,22 @@
             <div class="card-header">
                 <h4 class="card-subtitle"> {{ __('Student Name') }}: {{ $student->name }}</h4>
                 <p class="card-subtitle"> {{ __('Student ID') }}: {{ $student->student_id }} </p>
+
+                <form class="row">
+                    <div class="form-group mb-2 mx-sm-3">
+                        <label for="groupSelect" class="sr-only">oj</label>
+                        <select id="groupSelect" class="form-control" name="type">
+                            <option value="cf_rating" {{ Request::get('type', 'cf_rating') == 'cf_rating' ? 'selected': '' }}> CF Rating </option>
+                            <option value="solved" {{ Request::get('type', 'cf_rating') == 'solved' ? 'selected': '' }}> Solved Count </option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-2">
+                        <input type="submit"class="form-control btn btn-primary" id="SubmitButton" value="Get It">
+                    </div>
+                </form>
             </div>
+
+
 
             <div class="card-body">
                 <canvas id="ratingChart"></canvas>

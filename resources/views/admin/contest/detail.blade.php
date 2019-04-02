@@ -82,6 +82,11 @@
                                                     <input class="el-input--mini el-input__inner el-input" v-model="scope.row.rank" placeholder="">
                                                 </template>
                                             </el-table-column>
+                                            <el-table-column prop="rank" label="{{ __("Solved") }}" width="75">
+                                                <template slot-scope="scope" size="mini">
+                                                    <input class="el-input--mini el-input__inner el-input" v-model="scope.row.solved" placeholder="">
+                                                </template>
+                                            </el-table-column>
                                             <el-table-column label="{{ __("Opt") }}" width="75">
                                                 <template slot-scope="scope">
                                                     <el-button @click.native.prevent="deleteRow(scope.$index)" type="text" size="small">
@@ -154,6 +159,7 @@
                             student_id: res.student_id,
                             name: res.name,
                             rank: '',
+                            solved: '',
                         });
 
                     }
@@ -167,7 +173,8 @@
                         id: '',
                         student_id: '',
                         rank:'',
-                        student: ''
+                        student: '',
+                        solved: '',
                     });
                 },
 
