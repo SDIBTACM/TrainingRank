@@ -22,14 +22,14 @@
 
                 <form class="row">
                     <div class="form-group mb-2 mx-sm-3">
-                        <label for="groupSelect" class="sr-only">oj</label>
-                        <select id="groupSelect" class="form-control" name="type">
+                        <label for="groupSelect" class="sr-only"></label>
+                        <select id="groupSelect" class="form-control" name="type" onchange="$('#SubmitButton').click();">
                             <option value="cf_rating" {{ Request::get('type', 'cf_rating') == 'cf_rating' ? 'selected': '' }}> CF Rating </option>
                             <option value="solved" {{ Request::get('type', 'cf_rating') == 'solved' ? 'selected': '' }}> Solved Count </option>
                         </select>
                     </div>
                     <div class="form-group mb-2">
-                        <input type="submit"class="form-control btn btn-primary" id="SubmitButton" value="Get It">
+                        <input type="submit"class="form-control btn btn-primary" id="SubmitButton" value="Get It" style="display: none">
                     </div>
                 </form>
             </div>

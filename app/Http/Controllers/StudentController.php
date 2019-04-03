@@ -13,15 +13,14 @@ use App\Log;
 use App\Model\ContestResult;
 use App\Model\Group;
 use App\Model\Student;
+use Illuminate\Support\Facades\DB;
 
 
 class StudentController extends Controller
 {
     public function index(\Illuminate\Http\Request $request) {
 
-        $students = Student::with(['contestResult' => function($query) {
-            $query->orderBy('contest_id', 'desc')->orderBy('rating', 'desc')->value('rating');
-        }]);
+        $students = null;
 
         if ($request->get('name', null) != null) {
             $students === null ?
@@ -35,10 +34,24 @@ class StudentController extends Controller
                 $students = $students->where('group', $request->get('group'));
         }
 
-        $students === null ?
-            $students = Student::where('is_show', 0)->select(['student_id', 'name', 'id'])->paginate(20) :
-            $students = $students->where('is_show', 0)->orderBy('rating', 'desc')
-                ->select(['student_id', 'name', 'id', 'rating'])->paginate(20);
+        if (\Request::get('type', 'cf_rating') == 'solved') {
+
+            $students === null ?
+                $students = Student::where('is_show', 0)
+                    ->select('student_id', 'name', 'id')->addSelect('solved_rating as rating')
+                    ->orderBy('rating', 'desc')->paginate(20) :
+                $students = $students->where('is_show', 0)
+                    ->select('student_id', 'name', 'id')->addSelect('solved_rating as rating')
+                    ->orderBy('rating', 'desc')->paginate(20);
+            Log::debug('', $students);
+        } else {
+
+            $students === null ?
+                $students = Student::where('is_show', 0)->select(['student_id', 'name', 'id', 'rating'])->paginate(20) :
+                $students = $students->where('is_show', 0)->orderBy('rating', 'desc')
+                    ->select(['student_id', 'name', 'id', 'rating'])->paginate(20);
+
+        }
 
 
         return view('home.student.index', [

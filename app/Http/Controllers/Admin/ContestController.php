@@ -87,6 +87,7 @@ class ContestController extends Controller
         Student::chunk(100, function ($students) {
             foreach ($students as $student) {
                 $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->solved_rating = ContestResult::getSolvedRatingAvgByStudentId($student->id);
                 $student->save();
             }
         });
@@ -155,6 +156,7 @@ class ContestController extends Controller
         Student::chunk(100, function ($students) {
             foreach ($students as $student) {
                 $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->solved_rating = ContestResult::getSolvedRatingAvgByStudentId($student->id);
                 $student->save();
             }
         });
@@ -224,6 +226,7 @@ class ContestController extends Controller
         Student::chunk(100, function ($students) {
             foreach ($students as $student) {
                 $student->rating = ContestResult::getLatestRatingByStudentId($student->id);
+                $student->solved_rating = ContestResult::getSolvedRatingAvgByStudentId($student->id);
                 $student->save();
             }
         });

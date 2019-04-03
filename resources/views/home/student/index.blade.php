@@ -23,12 +23,20 @@
                     </div>
 
                     <div class="form-group mb-2 mx-sm-3">
-                        <label for="groupSelect" class="sr-only">oj</label>
+                        <label for="groupSelect" class="sr-only">Group</label>
                         <select id="groupSelect" class="form-control" name="group">
                             <option value="" {{ Request::get('group', null) == null ? 'selected': '' }}> Origin Group... </option>
                             @foreach($groups as $group)
                                 <option value="{{ $group->id }}" {{ Request::get('group', null) == $group->id ? 'selected': '' }}> {{ $group->name }} </option>
                             @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-2 mx-sm-3">
+                        <label for="groupSelect" class="sr-only"></label>
+                        <select id="groupSelect" class="form-control" name="type" onchange="$('#SubmitButton').click();">
+                            <option value="cf_rating" {{ Request::get('type', 'cf_rating') == 'cf_rating' ? 'selected': '' }}> CF Rating </option>
+                            <option value="solved" {{ Request::get('type', 'cf_rating') == 'solved' ? 'selected': '' }}> Solved Count </option>
                         </select>
                     </div>
 
