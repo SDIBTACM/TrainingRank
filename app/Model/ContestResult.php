@@ -50,7 +50,7 @@ class ContestResult extends Model
     }
 
     static public function getSolvedRatingAvgByStudentId($studentId) {
-        return self::where('student_id', $studentId)->avg('solved_rating');
+        return self::where('student_id', $studentId)->where('solved_rating', '>', '0')->avg('solved_rating');
     }
 
     public function student() {

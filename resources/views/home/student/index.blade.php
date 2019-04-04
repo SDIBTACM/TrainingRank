@@ -24,7 +24,7 @@
 
                     <div class="form-group mb-2 mx-sm-3">
                         <label for="groupSelect" class="sr-only">Group</label>
-                        <select id="groupSelect" class="form-control" name="group">
+                        <select id="groupSelect" class="form-control" name="group" onchange="$('#SubmitButton').click();">
                             <option value="" {{ Request::get('group', null) == null ? 'selected': '' }}> Origin Group... </option>
                             @foreach($groups as $group)
                                 <option value="{{ $group->id }}" {{ Request::get('group', null) == $group->id ? 'selected': '' }}> {{ $group->name }} </option>
@@ -53,7 +53,7 @@
 
                     <el-table-column label="options" width="180">
                         <template slot-scope="scope">
-                            <a :href="'{{ route('student.index') }}' + '/' + scope.row.id">
+                            <a :href="'{{ route('student.index') }}' + '/' + scope.row.id + '?type={{ Request::get('type', 'cf_rating') }}'">
                                 <el-button size="mini" type="info" >
                                     {{ __( 'Detail' ) }}
                                 </el-button></a>
