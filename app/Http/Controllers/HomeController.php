@@ -18,7 +18,7 @@ class HomeController extends Controller
         if (\Request::get('group', null) != null)
             $students = $students->where('group', \Request::get('group'));
 
-        $students = $students->get();
+        $students = $students->limit(20)->get();
 
 
         return view('welcome', [
