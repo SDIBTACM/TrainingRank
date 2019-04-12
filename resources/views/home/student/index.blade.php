@@ -40,7 +40,7 @@
                         <input type="text" id="groupInput" name="group" placeholder="student name" :value="JSON.stringify(groupSelect)" style="display: none">
 
                         <div>
-                            <el-checkbox-group v-model="groupSelect">
+                            <el-checkbox-group v-model="groupSelect" @change="currentSel">
                                 <el-checkbox-button v-for="group in groups" :label="group.id" :key="group.id">@{{group.name}}</el-checkbox-button>
                             </el-checkbox-group>
                         </div>
@@ -82,7 +82,12 @@
                     groupSelect: JSON.parse( @json(Request::get('group', '[]'))),
                 }
             },
-            methods: {},
+            methods: {
+                currentSel(selVal) {
+                    console.log(selVal);
+                    $('#SubmitButton').click();
+                }
+            },
             mounted() {
             }
         }
