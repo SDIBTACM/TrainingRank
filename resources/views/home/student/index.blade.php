@@ -16,33 +16,36 @@
             </div>
 
             <div class="card-body">
-                <form method="GET" class="form-inline">
+                <form method="GET" >
+
+                    <div class="form-inline">
+                        <div class="form-group mb-2 form-inline">
+                            <label for="studentName" class="sr-only">Name</label>
+                            <input type="text" class="form-control" id="studentName" name="name" placeholder="student name" value="{{ Request::get('name') }}">
+                        </div>
+                        <div class="form-group mb-2 mx-sm-3 form-inline">
+                            <label for="groupSelect" class="sr-only"></label>
+                            <select id="groupSelect" class="form-control" name="type" onchange="$('#SubmitButton').click();">
+                                <option value="cf_rating" {{ Request::get('type', 'cf_rating') == 'cf_rating' ? 'selected': '' }}> CF Rating </option>
+                                <option value="solved" {{ Request::get('type', 'cf_rating') == 'solved' ? 'selected': '' }}> Solved Count </option>
+                            </select>
+                        </div>
+                        <div class="form-group form-inline mb-2 mx-sm-3">
+                            <input type="submit" class="form-control btn btn-primary" id="SubmitButton" value="Search">
+                        </div>
+                    </div>
+
                     <div class="form-group mb-2">
-                        <label for="studentName" class="sr-only">Name</label>
-                        <input type="text"class="form-control" id="studentName" name="name" placeholder="student name" value="{{ Request::get('name') }}">
-                    </div>
-
-                    <div class="form-group mb-2 mx-sm-3">
                         <label for="groupSelect" class="sr-only">Group</label>
-                        <select id="groupSelect" class="form-control" name="group" onchange="$('#SubmitButton').click();">
-                            <option value="" {{ Request::get('group', null) == null ? 'selected': '' }}> Origin Group... </option>
-                            @foreach($groups as $group)
-                                <option value="{{ $group->id }}" {{ Request::get('group', null) == $group->id ? 'selected': '' }}> {{ $group->name }} </option>
-                            @endforeach
-                        </select>
+                        <input type="text" id="groupInput" name="group" placeholder="student name" :value="JSON.stringify(groupSelect)" style="display: none">
+
+                        <div>
+                            <el-checkbox-group v-model="groupSelect">
+                                <el-checkbox-button v-for="group in groups" :label="group.id" :key="group.id">@{{group.name}}</el-checkbox-button>
+                            </el-checkbox-group>
+                        </div>
                     </div>
 
-                    <div class="form-group mb-2 mx-sm-3">
-                        <label for="groupSelect" class="sr-only"></label>
-                        <select id="groupSelect" class="form-control" name="type" onchange="$('#SubmitButton').click();">
-                            <option value="cf_rating" {{ Request::get('type', 'cf_rating') == 'cf_rating' ? 'selected': '' }}> CF Rating </option>
-                            <option value="solved" {{ Request::get('type', 'cf_rating') == 'solved' ? 'selected': '' }}> Solved Count </option>
-                        </select>
-                    </div>
-
-                    <div class="form-group mb-2 mx-sm-3">
-                        <input type="submit"class="form-control btn btn-primary" id="SubmitButton" value="Search">
-                    </div>
                 </form>
 
                 <el-table :data="students" style="width: 100%" stripe>
@@ -75,6 +78,8 @@
             data: function () {
                 return {
                     students: JSON.parse( '@json($students)' ).data ,
+                    groups: JSON.parse( '@json($groups)'),
+                    groupSelect: JSON.parse( @json(Request::get('group', '[]'))),
                 }
             },
             methods: {},

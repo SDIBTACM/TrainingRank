@@ -13,7 +13,6 @@ use App\Log;
 use App\Model\ContestResult;
 use App\Model\Group;
 use App\Model\Student;
-use Illuminate\Support\Facades\DB;
 
 
 class StudentController extends Controller
@@ -28,10 +27,10 @@ class StudentController extends Controller
                 $students = $students->where('name', 'like', '%' . $request->get('name') . '%');
         }
 
-        if ($request->get('group', null) != null) {
+        if ($request->get('group', '[]') != '[]') {
             $students === null ?
-                $students = Student::where('group', $request->get('group')) :
-                $students = $students->where('group', $request->get('group'));
+                $students = Student::whereIn('group', json_decode(htmlspecialchars_decode($request->get('group')))) :
+                $students = $students->whereIn('group', json_decode(htmlspecialchars_decode($request->get('group'))));
         }
 
         if (\Request::get('type', 'cf_rating') == 'solved') {
