@@ -39,8 +39,8 @@ class ContestController extends Controller
 
         $validatedData = $request->validate([
             'contest-time' => 'required|date',
-            'contest-name' => 'required|unique:contests,name|max:42',
-            'url' => 'required|max:200'
+            'contest-name' => 'required|unique:contests,name|max:254',
+            'url' => 'required|max:254'
         ]);
 
         $students = [ ];
@@ -172,9 +172,9 @@ class ContestController extends Controller
             'contest-name' => [
                 'required',
                 Rule::unique('contests','name')->ignore($contest->id),
-                'max:42'
+                'max:254'
             ],
-            'url' => 'required|max:200'
+            'url' => 'required|max:254'
         ]);
 
         $contest->url = $validatedData['url'];
