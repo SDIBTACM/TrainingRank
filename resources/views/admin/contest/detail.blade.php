@@ -20,7 +20,7 @@
                                 <label for="contest-name" class="col-sm-3 col-form-label"> {{__("Contest Name")}} </label>
                                 <div class="col-md-6">
                                     <input type="text" class="form-control form-control{{ $errors->has('contest-name') ? ' is-invalid' : '' }}"
-                                           id="contest-name" placeholder="{{__("Contest Name")}}" name="contest-name" maxlength="40"
+                                           id="contest-name" placeholder="{{__("Contest Name")}}" name="contest-name" maxlength="254"
                                            value="{{ $contest->name }}">
                                     @if ($errors->has('contest-name'))
                                         <span class="invalid-feedback" role="alert">
