@@ -35,6 +35,35 @@
                         </div>
                     </div>
 
+                    <div class="form-group form-inline">
+                        <label for="startSelect"  class="col-sm-1 col-form-label">{{__("Start at")}}</label>
+                        <select id="startSelect" name="start_at" class="form-control">
+                            <option> Please Select... </option>
+                            @foreach($contests as $contest)
+                                @if (Request::get('start_at') == $contest->id)
+                                    <option value="{{ $contest->id }}" selected> {{ $contest->name }} </option>
+                                @else
+                                    <option value="{{ $contest->id }}" > {{ $contest->name }} </option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="form-group form-inline">
+                        <label for="endSelect" class="col-sm-1 col-form-label" >{{__('End before')}}</label>
+                        <select id="endSelect" name="end_at" class="form-control">
+                            <option> Please Select... </option>
+                            @foreach($contests as $contest)
+                                @if (Request::get('end_at') == $contest->id)
+                                    <option value="{{ $contest->id }}" selected> {{ $contest->name }} </option>
+                                @else
+                                    <option value="{{ $contest->id }}" > {{ $contest->name }} </option>
+                                @endif
+                            @endforeach
+                        </select>
+
+                    </div>
+
                     <div class="form-group mb-2">
                         <label for="groupSelect" class="sr-only">Group</label>
                         <input type="text" id="groupInput" name="group" placeholder="student name" :value="JSON.stringify(groupSelect)" style="display: none">
@@ -46,6 +75,7 @@
                         </div>
                     </div>
 
+
                 </form>
 
                 <el-table :data="students" style="width: 100%" stripe>
@@ -56,7 +86,8 @@
 
                     <el-table-column label="options" width="180">
                         <template slot-scope="scope">
-                            <a :href="'{{ route('student.index') }}' + '/' + scope.row.id + '?type={{ Request::get('type', 'cf_rating') }}'">
+                            <a :href="'{{ route('student.index') }}' + '/' + scope.row.id +
+                             '?type={{ Request::get('type', 'cf_rating') }}&start_at={{Request::get('start_at')}}&end_at={{Request::get('end_at')}}'">
                                 <el-button size="mini" type="info" >
                                     {{ __( 'Detail' ) }}
                                 </el-button></a>
@@ -64,9 +95,9 @@
                     </el-table-column>
                 </el-table>
 
-                <div class="link justify-content-center">
-                    {{ $students->appends(Request::query())->links() }}
-                </div>
+{{--                <div class="link justify-content-center">--}}
+{{--                    {{ $students->appends(Request::query())->links() }}--}}
+{{--                </div>--}}
             </div>
         </div>
     </div>
@@ -77,7 +108,7 @@
         const data = {
             data: function () {
                 return {
-                    students: JSON.parse( '@json($students)' ).data ,
+                    students: JSON.parse( '@json($students)' ) ,
                     groups: JSON.parse( '@json($groups)'),
                     groupSelect: JSON.parse( @json(Request::get('group', '[]'))),
                 }
