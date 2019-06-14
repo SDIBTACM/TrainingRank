@@ -42,7 +42,7 @@ class Log
      * before record message, it will check APP_DEBUG status
      */
     public static function debug($message) {
-        if (env('APP_DEBUG', false) === true)
+        if (config('app.debug', false) === true)
             @self::saveLog($message, __FUNCTION__, func_get_args());
     }
 
