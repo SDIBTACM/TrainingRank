@@ -20,7 +20,7 @@ class ContestController extends Controller
      */
     public function index(Request $request) {
 
-        $contests = Contest::paginate(20);
+        $contests = Contest::OrderBy('start_time', 'desc')->paginate(20);
 
         return view('home.contest.index', [
             'title' => 'Contest List',

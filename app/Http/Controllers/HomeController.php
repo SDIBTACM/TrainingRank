@@ -22,7 +22,7 @@ class HomeController extends Controller
 
 
         return view('welcome', [
-            'contests' => Contest::limit(20)->get(),
+            'contests' => Contest::limit(20)->OrderBy('start_time', 'desc')->get(),
             'students' => $students,
             'groups' => Group::get(),
            ]);
